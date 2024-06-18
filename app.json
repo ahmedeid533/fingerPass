@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "AllInFingerPrint",
+    "slug": "fingerpass",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.ahmedeid533.fingerpass"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "166fc8a7-64b9-45e4-a42f-a5213f57e418"
+      }
+    },
+    "owner": "ahmedeid533",
+    "plugins": [
+      "expo-secure-store"
+    ]
+  }
+}
