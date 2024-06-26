@@ -10,10 +10,16 @@ import {
 import { Icon } from '@rneui/themed';
 import { useNavigation } from "@react-navigation/native";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { AuthContext } from "../auth";
 
 
 export function MyCards() {
+	/**
+	 * Context variables for authentication.
+	 */
+	const { credential, setCredential, hasUser, setHasUser } = useContext(AuthContext);
 	const cards = [
+		require('../assets/id.jpg'),
 		require('../assets/visa2.png'),
 		require('../assets/visa1.png'),
 		require('../assets/visa2.png'),
