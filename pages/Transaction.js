@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import {
 	View,
 	Text,
@@ -11,45 +11,61 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 
 
 export function Transaction() {
+
+	const mainImages = require('../assets/nditp.png')
+	const [splash, setSplash] = useState(false);
+	useEffect(() => {
+		setTimeout(() => {
+			setSplash(true);
+		}, 2000);
+	}, []);
+
 	return (
 		<>
+		{
+			!splash &&
 			<View style={styles.container}>
-				<View style={styles.Main}>
-					<Text style={styles.text}>ahmed eid gomaa</Text>
-					<Image source={require('../assets/myRegPhotoSocial.png')} style={styles.image} />
-				</View>
-				<View style={styles.trans}>
-					<Text style={styles.text}>transfer money</Text>
-				</View>
-				<View style={{width:wp(90)}}>
-				<View >
-					<Text style={styles.text1}>chose your card</Text>
-					<TextInput style={styles.input} />
-				</View>
-				<View >
-					<Text style={styles.text1}>amount</Text>
-					<TextInput
-						style={styles.input}
-						keyboardType='numeric'
-					/>
-				</View>
-				</View>
-				<View style={{
-					width:wp(100),
-					alignItems: "center",
-					}}>
-					<Pressable
-						style={{width: wp(60)}}
-					>
-						<View style={styles.LogIn}>
-							<Text style={styles.LogIn.text}>
-								transfere
-							</Text>
-						</View>
-					</Pressable>
-				</View>
-
+				<Image source={mainImages} style={{ width: wp(50), height: wp(50), objectFit:"contain"}} />
 			</View>
+		}
+		{
+			splash &&
+			<>
+				<View style={styles.container}>
+					<View style={styles.trans}>
+						<Text style={styles.text}>transfer money</Text>
+					</View>
+					<View style={{width:wp(90)}}>
+					<View >
+						<Text style={styles.text1}>Email of the receiver</Text>
+						<TextInput style={styles.input} />
+					</View>
+					<View >
+						<Text style={styles.text1}>amount</Text>
+						<TextInput
+							style={styles.input}
+							keyboardType='numeric'
+						/>
+					</View>
+					</View>
+					<View style={{
+						width:wp(100),
+						alignItems: "center",
+						}}>
+						<Pressable
+							style={{width: wp(60)}}
+						>
+							<View style={styles.LogIn}>
+								<Text style={styles.LogIn.text}>
+									transfere
+								</Text>
+							</View>
+						</Pressable>
+					</View>
+
+				</View>
+			</>
+		}
 		</>
 	)
 }	
@@ -60,6 +76,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
 		margin: wp(5),
+		height: hp(100),
 	},
 	text: {
 		fontSize: hp(3.2),

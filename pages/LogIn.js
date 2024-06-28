@@ -1,16 +1,25 @@
-import { Pressable, TextInput, Image } from "react-native";
-import { StyleSheet } from "react-native";
-import { Text, View,CheckBox } from "react-native";
+import {
+			Pressable,
+			TextInput,
+			Image,
+			KeyboardAvoidingView,
+			Platform,
+			Text,
+			View,
+			StyleSheet,
+			ScrollView,
+		} from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../auth";
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from "@react-navigation/native";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
+async function save(key, value) {
+	await SecureStore.setItemAsync(key, value);
+}
 
-var Hashes = require('jshashes');
-var md5 = new Hashes.MD5();
-const rnd = randomNum(0, 4)
+
 /**
  * Renders the login screen.
  */
@@ -21,60 +30,83 @@ export function LogIn(props) {
 	const { credential, setCredential, hasUser, setHasUser } = useContext(AuthContext);
 
 	/**
+	 * Sets the user based on entered credentials.
+	 */
+	const fecthToken = async () => {
+		var formdata = new FormData();
+		formdata.append("Email", credential.Email);
+		formdata.append("Pin", credential.Bin);
+
+		var requestOptions = {
+			method: 'POST',
+			body: formdata,
+			redirect: 'follow',
+		};
+		fetch(process.env.EXPO_PUBLIC_API_URL + "log/login", requestOptions)
+		.then(response => response.json())
+		.then(result => {
+			if (result.access_token) {
+				console.log('success', result.access_token)
+				save("token", result.access_token)
+				setHasUser(true);
+			} else {	
+				console.log('error', result)
+				alert("wrong email or bin");
+			}
+		})
+		.catch(error => {
+			console.log('error', error)
+			alert("wrong email or bin");
+		});
+	}
+	/**
 	 * State variables for text and checkbox.
 	 */
 	const [text, setText] = useState("");
 	const [check, setCheck] = useState(false);
-	
+	const [splash, setSplash] = useState(false);
+
 	/**
 	 * Retrieves email and password from SyncStorage.
 	 */
-	const autEmail = getValueFor("email");
-	const autPassword = getValueFor("password");
-	async function getValueFor(key) {
-		let result = await SecureStore.getItemAsync(key);
-		if (result) {
-			return result;
-		} else {
-			return null;
-		}
-	}
+	// const autEmail = getValueFor("email");
+	// const autPassword = getValueFor("password");
+	
 	/**
 	 * Navigation object.
 	 */
 	const nav = useNavigation();
 
-	/**
-	 * Sets the user based on entered credentials.
-	 */
-	const setUser = () => {
-		let Email= autEmail === credential.Email;
-		let active = autPassword === credential.Password;
-		Email = true;
-		active = true;
-		if (Email) {
-			if (active)
-				setHasUser(active);
-			else
-				alert("wrong password");
-		} else {
-			alert("wrong email");
-		}
-	}
-
+	
 ;	/**
-	 * Array of main images.
+	 * main image.
 	 */
-	const mainImages = [
-		require('../assets/Fing.png'),
-		require('../assets/Fing1.jpg'),
-		require('../assets/Fing2.jpg'),
-		require('../assets/Fing3.jpg'),
-	];
+	const mainImages = require('../assets/nditp.png')
 
+	useEffect(() => {
+		setTimeout(() => {
+			setSplash(true);
+		}, 2000);
+	}, []);
 	return (
-		<View style={styles.container}>
-			<Image source={mainImages[rnd]} style={{ width: "90%", height: 300, objectFit:"contain"}} />
+		<>
+		{
+			!splash &&
+			<View style={styles.container}>
+				<Image source={mainImages} style={{ width: wp(50), height: wp(50), objectFit:"contain"}} />
+			</View>
+		}
+		{
+			splash &&
+			<View style={styles.container}>
+			<KeyboardAvoidingView 
+				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      			keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+				style={styles.container}
+			>
+			<ScrollView >
+			<View style={styles.container}>
+			<Image source={mainImages} style={{ width: "90%", height: 300, objectFit:"contain"}} />
 			<Text style={styles.h2}>sign in</Text>
 			<TextInput
 				style={styles.input}
@@ -84,25 +116,14 @@ export function LogIn(props) {
 				}}></TextInput>
 			<TextInput
 				style={styles.input}
-				placeholder="Password"
+				placeholder="bin"
 				secureTextEntry={true}
+				keyboardType="numeric"
 				onChangeText={(text) => {
-					setCredential({ ...credential, password: md5.hex(text) });
+					setCredential({ ...credential, Bin: text });
 				}}></TextInput>
-			<View style={{height: 50,width:"100%",flexDirection:"row",alignItems:"center" , justifyContent:"space-evenly"}}>
-				{/* check box */}
-				<View style={{flexDirection:"row",alignItems:"center"}}>
-					{/* <CheckBox
-						value={check}
-						onValueChange={() => {setCheck(!check)}}
-					/> */}
-					<Text style={{fontSize:20, marginLeft:5, opacity:(check ? 1 : 0.6)}}>Remember me</Text>
-				</View>
-				<Pressable onPress={() => nav.navigate('ForgotPassword')}>			
-					<Text style={{fontSize:20, opacity:0.8, textDecorationLine:"underline"}}>Forgot password?</Text>
-				</Pressable>
-			</View>
-			<Pressable onPress={setUser} style={styles.LogInContainer}>
+			
+			<Pressable onPress={fecthToken} style={styles.LogInContainer}>
 				<View style={styles.LogIn}>
 					<Text style={styles.LogIn.text}>
 						sign in
@@ -110,7 +131,7 @@ export function LogIn(props) {
 				</View>
 			</Pressable>
 			
-			<View style={{height: 50,width:"100%",flexDirection:"row",alignItems:"center" , justifyContent:"space-evenly"}}>
+			{/* <View style={{height: 50,width:"100%",flexDirection:"row",alignItems:"center" , justifyContent:"space-evenly"}}>
 				<View style={{height: 1,width:"20%",backgroundColor:"#9747FF"}}></View>
 				<View>
 					<Text style={{textAlign:"center",fontSize:23}}>or continue with</Text>
@@ -128,16 +149,13 @@ export function LogIn(props) {
 				<View style={styles.IconsC}>
 					<Image source={require('../assets/x.png')} style={styles.Icons} />
 				</View>
+			</View> */}
 			</View>
-
-			<Pressable onPress={() => nav.navigate('SignUp')} style={styles.LogInContainer}>
-				<View >
-					<Text style={styles.text}>
-						SignUp
-					</Text>
-				</View>
-			</Pressable>
+		</ScrollView>
+		</KeyboardAvoidingView>
 		</View>
+		}
+		</>
 	)
 }
 const styles = StyleSheet.create({
@@ -147,6 +165,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "space-evenly",
 		width: wp(100),
+		height: hp(90),
 	},
 	text: {
 		fontSize: hp(2.2),

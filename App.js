@@ -6,11 +6,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { LogIn } from './pages/LogIn';
 import { Home } from './pages/Home';
-import { SignUp } from './pages/SignUp';
 import { AddCard } from './pages/AddCard';
 import { Profile } from './pages/Profile';
 import { Notify } from './pages/Notify';
 import { MyCards } from './pages/MyCards';
+import { CardData } from './pages/CardData';
 import { EditProfile } from './pages/EditProfile';
 import { Transaction } from './pages/Transaction';
 import { Icon } from '@rneui/themed';
@@ -26,7 +26,6 @@ export function AuthPage () {
 	return (
 	<Stack.Navigator>
 		<Stack.Screen name="LogIn" component={LogIn} />
-		<Stack.Screen name='SignUp' component={SignUp} />
 	</Stack.Navigator>);
 };
 
@@ -59,6 +58,7 @@ export function TheApp () {
 			}}
 		/>
 		<Stack.Screen name="Transaction" component={Transaction}/>
+		<Stack.Screen name="CardData" component={CardData}/>
 	</Stack.Navigator>);
 }
 
@@ -102,6 +102,7 @@ export function Pages () {
 				tabBarShowLabel: false,
 			}}
 		/>
+
 		<Tab.Screen
 			name="Home"
 			component={Home}
@@ -118,15 +119,15 @@ export function Pages () {
 
 export default function App() {
 	const [credential, setCredential] = useState({
-		"Email": "AhmedEidGomaa@gmail.com",
-		"Password": md5.hex("9638741Aa")
+		"Email": "",
+		"Bin": ""
 	});
 	const [hasUser, setHasUser] = useState(false);
   return (
     <AuthContext.Provider value={{ credential, setCredential, hasUser, setHasUser }}>
 		<NavigationContainer>
 			{!hasUser 
-			? <AuthPage/> 
+			? <AuthPage/>
 			: <TheApp/>}
 		</NavigationContainer>  
 	</AuthContext.Provider>

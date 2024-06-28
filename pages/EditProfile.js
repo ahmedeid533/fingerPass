@@ -15,7 +15,7 @@ import {
 // import { useContext,useEffect } from "react";
 // import { Icon } from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const checkPhotoLibraryPermission = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -49,67 +49,86 @@ export function EditProfile() {
 	
 		}
 	};
+
+	const mainImages = require('../assets/nditp.png')
+	const [splash, setSplash] = useState(false);
+	useEffect(() => {
+		setTimeout(() => {
+			setSplash(true);
+		}, 2000);
+	}, []);
 	return (
 		<>
+		{
+			!splash &&
 			<View style={styles.container}>
-				<Text style={[styles.h1,{marginTop:10}]}>Edit profile</Text>
-				<Pressable 
-					style={{alignItems:"center"}}
-					onPress={handlePhotoLibraryPermission}
-				>
-					<Image source={{uri: image}} style={styles.image} />
-					<Text style={styles.h2}>change photo</Text>
-				</Pressable>
-				{/* <Text style={styles.h3}>{credential.Email}</Text> */}
+				<Image source={mainImages} style={{ width: wp(50), height: wp(50), objectFit:"contain"}} />
 			</View>
-			<View style={styles.inputContainer}>
-				<View><Text style={styles.h2}>Full name</Text>
-				<TextInput
-					style={styles.input}
-					placeholder="name"
-					onChangeText={(text) => {
-						// setCredential({ ...credential, Email: text });
-					}}></TextInput>
-			</View>
-			<View>
-				<Text style={styles.h2}>mobile number</Text>
-				<TextInput
-					style={styles.input}
-					placeholder="phone"
-					onChangeText={(text) => {
-						// setCredential({ ...credential, Email: text });
-					}}></TextInput>
-			</View>
-			<View>
-				<Text style={styles.h2}>Date of Birth</Text>
-				<TextInput
-					style={styles.input}
-					placeholder="date"
-					onChangeText={(text) => {
-						// setCredential({ ...credential, Email: text });
-					}}></TextInput>
-			</View>
-			<View>
-				<Text style={styles.h2}>Email</Text>
-				<TextInput
-					style={styles.input}
-					placeholder="Email"
-					onChangeText={(text) => {
-						// setCredential({ ...credential, Email: text });
-					}}></TextInput>
-			</View>
-			<View>
-			{/* onPress={setUser} */}
-				<Pressable >
-					<View style={styles.LogIn}>
-						<Text style={styles.LogIn.text}>
-							save changes
-						</Text>
-					</View>
-				</Pressable>
-			</View>
-			</View>
-			
+		}
+		{
+			splash &&
+			<>
+				<View style={styles.container}>
+					<Text style={[styles.h1,{marginTop:10}]}>Edit profile</Text>
+					<Pressable 
+						style={{alignItems:"center"}}
+						onPress={handlePhotoLibraryPermission}
+					>
+						<Image source={{uri: image}} style={styles.image} />
+						<Text style={styles.h2}>change photo</Text>
+					</Pressable>
+					{/* <Text style={styles.h3}>{credential.Email}</Text> */}
+				</View>
+				<View style={styles.inputContainer}>
+					<View><Text style={styles.h2}>Full name</Text>
+					<TextInput
+						style={styles.input}
+						placeholder="name"
+						onChangeText={(text) => {
+							// setCredential({ ...credential, Email: text });
+						}}></TextInput>
+				</View>
+				<View>
+					<Text style={styles.h2}>mobile number</Text>
+					<TextInput
+						style={styles.input}
+						placeholder="phone"
+						onChangeText={(text) => {
+							// setCredential({ ...credential, Email: text });
+						}}></TextInput>
+				</View>
+				<View>
+					<Text style={styles.h2}>Date of Birth</Text>
+					<TextInput
+						style={styles.input}
+						placeholder="date"
+						onChangeText={(text) => {
+							// setCredential({ ...credential, Email: text });
+						}}></TextInput>
+				</View>
+				<View>
+					<Text style={styles.h2}>Email</Text>
+					<TextInput
+						style={styles.input}
+						placeholder="Email"
+						onChangeText={(text) => {
+							// setCredential({ ...credential, Email: text });
+						}}></TextInput>
+				</View>
+				<View>
+				{/* onPress={setUser} */}
+					<Pressable >
+						<View style={styles.LogIn}>
+							<Text style={styles.LogIn.text}>
+								save changes
+							</Text>
+						</View>
+					</Pressable>
+				</View>
+				</View>
+				
+			</>
+		}
 		</>
 	);
 }
@@ -120,6 +139,7 @@ const styles = StyleSheet.create({
 		// backgroundColor: "#fff",
 		alignItems: "center",
 		justifyContent: "center",
+		height: hp(100),
 	},
 	inputContainer: {
 		padding: wp(5),

@@ -3,16 +3,29 @@
 	  "preview": {
 		"android": {
 		  "buildType": "apk"
+		},
+		"env": {
+			"EXPO_PUBLIC_API_URL":"https://api.fingerprint.alxairbnbahmed.tech/api/"
 		}
 	  },
 	  "preview2": {
 		"android": {
 		  "gradleCommand": ":app:assembleRelease"
+		},
+		"env": {
+			"EXPO_PUBLIC_API_URL":"https://api.fingerprint.alxairbnbahmed.tech/api/"
 		}
 	  },
 	  "preview3": {
-		"developmentClient": true
+		"developmentClient": true,
+		"env": {
+			"EXPO_PUBLIC_API_URL":"https://api.fingerprint.alxairbnbahmed.tech/api/"
+		}
 	  },
-	  "production": {}
+	  "production": {
+		"env": {
+			"EXPO_PUBLIC_API_URL":"https://api.fingerprint.alxairbnbahmed.tech/api/"
+		}
+	  }
 	}
   }
